@@ -1,0 +1,24 @@
+.grid    { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.optCard { }
+.optHead { display: flex; gap: 9px; align-items: center; margin-bottom: 18px; }
+.labelInput { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
+
+.sides   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sideCol { display: flex; flex-direction: column; gap: 6px; }
+.sideLabel { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 4px; font-weight: 500; }
+.pros { color: var(--green); }
+.cons { color: var(--red); }
+
+.itemRow { display: flex; gap: 6px; align-items: center; }
+.itemInput { padding: 8px 11px; font-size: 13px; }
+
+.addItemBtn { background: transparent; border: none; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; cursor: pointer; text-align: left; padding: 2px 0; transition: color 0.18s; letter-spacing: 0.07em; }
+.addItemBtn:hover { color: var(--cream); }
+
+.actions { display: flex; gap: 10px; align-items: stretch; }
+
+@media (max-width: 520px) {
+  .sides { grid-template-columns: 1fr; }
+  .actions { flex-direction: column; }
+  .actions > * { flex: unset !important; }
+}

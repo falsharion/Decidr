@@ -1,0 +1,397 @@
+/* ═══════════════════════════════════════════════════════════
+   HomePage — Shadient-inspired dark modern redesign
+   ═══════════════════════════════════════════════════════════ */
+
+.page { padding-top: 0; overflow-x: hidden; }
+
+/* ── Grid background ─────────────────────────────────────── */
+.grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+}
+
+/* ── Floating orbs ───────────────────────────────────────── */
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(100px); pointer-events: none; z-index: 0;
+  transition: transform 0.8s cubic-bezier(.4,0,.2,1);
+  transform: translate(var(--mx, 0), var(--my, 0));
+}
+.orbGold   { width: 480px; height: 480px; background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%); animation: orbDrift 12s ease-in-out infinite; }
+.orbPurple { width: 560px; height: 560px; background: radial-gradient(circle, rgba(139,109,209,0.14) 0%, transparent 70%); animation: orbDrift 16s ease-in-out infinite reverse; }
+.orbBlue   { width: 400px; height: 400px; background: radial-gradient(circle, rgba(78,173,122,0.10) 0%, transparent 70%); animation: orbDrift 10s ease-in-out infinite 4s; }
+@keyframes orbDrift {
+  0%,100% { transform: translate(0, 0); }
+  33%     { transform: translate(12px, -18px); }
+  66%     { transform: translate(-8px, 12px); }
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.hero {
+  position: relative; overflow: hidden;
+  min-height: 92vh; display: flex; align-items: center;
+  padding: 100px 0 80px;
+  background: radial-gradient(ellipse 100% 70% at 50% -10%, rgba(139,109,209,0.09) 0%, transparent 60%);
+}
+
+.heroInner {
+  position: relative; z-index: 2;
+  max-width: 600px; margin: 0 auto;
+  text-align: center; padding: 0 20px;
+  flex: 1;
+}
+
+/* Badge */
+.heroBadge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px; border-radius: 50px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+}
+.badgeDot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 8px var(--gold); }
+  50%      { opacity: 0.6; box-shadow: 0 0 20px var(--gold); }
+}
+
+/* Title */
+.heroTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 8vw, 88px);
+  color: var(--cream); line-height: 1.0;
+  margin-bottom: 22px; letter-spacing: -0.01em;
+}
+.heroGrad {
+  background: linear-gradient(135deg, #e8c97a 0%, #c9a84c 40%, #a580e8 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+}
+
+.heroSub {
+  font-size: 16px; font-weight: 300; color: var(--muted);
+  line-height: 1.75; max-width: 420px; margin: 0 auto 36px;
+}
+
+/* CTAs */
+.heroCtas {
+  display: flex; justify-content: center; align-items: center;
+  gap: 14px; flex-wrap: wrap; margin-bottom: 40px;
+}
+
+.ctaPrimary {
+  display: inline-flex; align-items: center;
+  padding: 6px; 
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--gold), #a580e8);
+  text-decoration: none;
+  box-shadow: 0 4px 28px rgba(201,168,76,0.25);
+  transition: transform 0.22s, box-shadow 0.22s;
+}
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(201,168,76,0.35);
+}
+.ctaPrimaryInner {
+  display: block; padding: 13px 30px; border-radius: 50px;
+  background: var(--bg);
+  font-family: 'Playfair Display', serif; font-size: 16px;
+  font-weight: 700; font-style: italic;
+  color: var(--cream);
+  transition: background 0.22s;
+}
+.ctaPrimary:hover .ctaPrimaryInner { background: rgba(10,10,15,0.85); }
+
+.ctaSecondary {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  padding: 13px 22px; border-radius: 50px;
+  border: 1px solid var(--border);
+  transition: border-color 0.18s, color 0.18s, transform 0.18s;
+}
+.ctaSecondary:hover { border-color: var(--border-hi); color: var(--cream); transform: translateY(-1px); }
+
+/* Stat pills */
+.statRow { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.statPill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 50px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
+.statN {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; color: var(--gold-lt); line-height: 1;
+}
+.statL {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+
+/* Hero visual — floating tool cards */
+.heroVisual {
+  position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+  z-index: 1; display: flex; align-items: center;
+}
+.floatStack { display: flex; flex-direction: column; gap: 12px; }
+.floatCard {
+  padding: 14px 18px; border-radius: 14px;
+  background: rgba(17,17,24,0.85);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  animation: floatCard 5s ease-in-out infinite;
+  animation-delay: calc(var(--fi) * 1.4s);
+  min-width: 200px;
+}
+@keyframes floatCard {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(0.5deg); }
+}
+.floatIcon { font-size: 20px; }
+.floatName {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; color: var(--cream); flex: 1;
+}
+.floatTag {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); padding: 2px 7px; border-radius: 20px;
+  background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+}
+
+/* ── Marquee ─────────────────────────────────────────────── */
+.marqueeWrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden; padding: 14px 0;
+  background: rgba(255,255,255,0.01);
+}
+.marqueeTrack {
+  display: flex; gap: 0;
+  animation: marquee 22s linear infinite;
+  width: max-content;
+}
+.marqueeItem {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); padding: 0 36px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+.marqueeItem:hover { color: var(--gold); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Section shared ──────────────────────────────────────── */
+.sectionHead { text-align: center; margin-bottom: 44px; }
+.sectionEyebrow {
+  display: inline-block; font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; opacity: 0.85;
+}
+.sectionTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px); color: var(--cream);
+  margin-bottom: 12px; line-height: 1.15;
+}
+.sectionSub {
+  font-size: 15px; font-weight: 300; color: var(--muted);
+  max-width: 400px; margin: 0 auto; line-height: 1.65;
+}
+
+/* ── Tools section ───────────────────────────────────────── */
+.toolsSection { padding: 80px 0 80px; }
+
+.toolsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+/* 5th card spans full width of last row if odd */
+.toolsGrid > *:nth-child(4) { grid-column: 1 / 2; }
+.toolsGrid > *:nth-child(5) { grid-column: 2 / 3; }
+
+.toolCard {
+  position: relative; display: block; text-decoration: none;
+  border-radius: 18px; overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: transform 0.24s, border-color 0.24s, box-shadow 0.24s;
+}
+.toolCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201,168,76,0.25);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.toolCard:hover .toolCardGlow { opacity: 1; }
+.toolCard:hover .toolArrow { transform: translateX(5px); opacity: 1; }
+
+.toolCardInner { padding: 24px; position: relative; z-index: 1; }
+.toolCardGlow {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at 30% 0%, rgba(201,168,76,0.07) 0%, transparent 60%);
+  transition: opacity 0.3s;
+}
+
+.toolCardTop {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.toolIconWrap {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 21px;
+  transition: background 0.2s, border-color 0.2s;
+}
+.toolCard:hover .toolIconWrap {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.2);
+}
+.toolTagBadge {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); padding: 3px 9px; border-radius: 20px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+}
+.toolName {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; color: var(--cream); margin-bottom: 8px;
+}
+.toolDesc {
+  font-size: 13px; font-weight: 300; color: var(--muted);
+  line-height: 1.6; margin-bottom: 20px;
+}
+.toolCta {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.toolCard:hover .toolCta { opacity: 1; }
+.toolArrow { transition: transform 0.22s, opacity 0.22s; opacity: 0.4; }
+
+/* ── How it works ────────────────────────────────────────── */
+.howSection {
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139,109,209,0.04) 0%, transparent 70%);
+}
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step  { display: flex; gap: 24px; }
+.stepLeft {
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; padding-top: 6px;
+}
+.stepNum {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; color: var(--gold);
+  flex-shrink: 0;
+}
+.stepLine {
+  width: 1px; flex: 1; min-height: 32px;
+  background: linear-gradient(to bottom, rgba(201,168,76,0.2), transparent);
+  margin: 8px 0;
+}
+.stepBody { padding-bottom: 36px; }
+.stepIcon {
+  font-size: 20px; margin-bottom: 8px; display: block;
+  color: var(--gold); opacity: 0.7;
+}
+.stepTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px; color: var(--cream); margin-bottom: 6px;
+}
+.stepDesc { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+
+/* ── CTA Banner ──────────────────────────────────────────── */
+.ctaBanner {
+  position: relative; overflow: hidden;
+  padding: 80px 20px; text-align: center;
+  border-top: 1px solid var(--border);
+}
+.ctaBannerGlow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 300px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.09) 0%, transparent 70%);
+  filter: blur(40px); pointer-events: none;
+}
+.ctaBannerTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 52px); color: var(--cream);
+  margin-bottom: 12px; line-height: 1.1;
+}
+.ctaBannerSub {
+  font-size: 15px; color: var(--muted); font-weight: 300;
+  margin-bottom: 32px;
+}
+.ctaBannerBtns {
+  display: flex; justify-content: center; align-items: center;
+  gap: 14px; flex-wrap: wrap;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+}
+.footerInner {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footerBrand {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; color: var(--gold-lt); opacity: 0.5;
+}
+.footerLinks { display: flex; gap: 24px; flex-wrap: wrap; }
+.footerLink {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.15s;
+}
+.footerLink:hover { color: var(--cream); }
+.footerNote {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); opacity: 0.5;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .heroVisual { display: none; }
+  .toolsGrid  { grid-template-columns: repeat(2, 1fr); }
+  .toolsGrid > *:nth-child(4),
+  .toolsGrid > *:nth-child(5) { grid-column: auto; }
+}
+@media (max-width: 600px) {
+  .hero { min-height: 80vh; padding: 80px 0 60px; text-align: center; }
+  .toolsGrid { grid-template-columns: 1fr; }
+  .footerInner { flex-direction: column; text-align: center; }
+  .footerLinks { justify-content: center; }
+  .marqueeItem { padding: 0 24px; }
+}

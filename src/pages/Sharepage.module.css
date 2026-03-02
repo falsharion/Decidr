@@ -1,0 +1,116 @@
+/* ── Flip card ───────────────────────────────────────────── */
+.flipCard {
+  background: var(--surface);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: 28px; padding: 32px;
+  position: relative; overflow: hidden;
+  margin-bottom: 12px;
+}
+.flipCardAccent {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--purple), transparent);
+  opacity: 0.5;
+}
+.flipCardGlow {
+  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.flipEyebrow {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #c9a84c; margin-bottom: 12px;
+}
+.flipTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 6vw, 52px);
+  color: #e8c97a; line-height: 1.15;
+  margin: 0 0 20px;
+}
+
+/* Context echo */
+.contextEcho {
+  background: var(--surface2); border-radius: 14px;
+  padding: 14px 16px; border: 1px solid var(--border);
+}
+.contextLabel {
+  display: block; font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #7a6a50; margin-bottom: 5px;
+}
+.contextText {
+  font-size: 13px; color: #b8aa90;
+  font-style: italic; line-height: 1.6; margin: 0;
+}
+
+/* ── AI card ─────────────────────────────────────────────── */
+.aiCard {
+  background: var(--surface);
+  border: 1px solid rgba(139,109,209,0.22);
+  border-radius: 24px; padding: 24px;
+  position: relative; overflow: hidden;
+  margin-bottom: 4px;
+}
+.aiCardAccent {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139,109,209,0.5), transparent);
+}
+.aiCardHeader {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+}
+.aiStar { font-size: 18px; color: #c9a84c; }
+.aiCardLabel {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: #a89878;
+}
+
+/* AI pick block */
+.aiPickBlock {
+  background: linear-gradient(145deg, var(--surface2) 0%, rgba(139,109,209,0.05) 100%);
+  border: 1px solid rgba(139,109,209,0.18);
+  border-radius: 18px; padding: 20px;
+  text-align: center; margin-bottom: 14px;
+}
+.aiPickLabel {
+  display: block; font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #7a6858; margin-bottom: 10px;
+}
+.aiPickText {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 4vw, 30px);
+  color: #e8c97a; margin: 0 0 12px; line-height: 1.25;
+}
+.matchBadge {
+  display: inline-flex; align-items: center;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: #5ec68a; padding: 3px 10px; border-radius: 20px;
+  background: rgba(78,173,122,0.1);
+  border: 1px solid rgba(78,173,122,0.22);
+}
+.diffBadge {
+  display: inline-flex; align-items: center;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: #b09fe8; padding: 3px 10px; border-radius: 20px;
+  background: rgba(139,109,209,0.1);
+  border: 1px solid rgba(139,109,209,0.22);
+}
+
+/* AI reason */
+.aiReasonBlock {
+  background: var(--surface2); border-radius: 14px;
+  padding: 16px; border-left: 3px solid rgba(139,109,209,0.5);
+}
+.aiReasonText {
+  font-size: 14px; font-weight: 300;
+  color: #c8baa0; line-height: 1.75;
+  margin: 0; white-space: pre-line;
+}
+
+@media (max-width: 520px) {
+  .flipCard, .aiCard { padding: 22px 16px; }
+}

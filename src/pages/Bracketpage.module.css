@@ -1,0 +1,468 @@
+/* ═══════════════════════════════════════════════════════════
+   BracketPage — Fight Arena Animations
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Setup ───────────────────────────────────────────────── */
+.inputList { display: flex; flex-direction: column; gap: 9px; }
+.inputRow  { display: flex; align-items: center; gap: 9px; }
+.inputNum  {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--gold); opacity: 0.42; width: 20px; flex-shrink: 0; text-align: right;
+}
+
+/* ── Arena wrapper ───────────────────────────────────────── */
+.arenaWrap {
+  display: flex; flex-direction: column; gap: 18px;
+  animation: arenaEnter 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes arenaEnter {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* Progress */
+.progressRow  { display: flex; align-items: center; gap: 12px; }
+.progressLabel {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); white-space: nowrap; flex-shrink: 0;
+}
+.progressTrack {
+  flex: 1; height: 3px; background: rgba(255,255,255,0.06);
+  border-radius: 4px; overflow: hidden;
+}
+.progressFill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--purple));
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Match question */
+.matchQ {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 4vw, 24px);
+  color: var(--cream); text-align: center; opacity: 0.85;
+  margin: 0;
+}
+
+/* ── Fight arena ─────────────────────────────────────────── */
+.arena {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 0; align-items: stretch;
+  position: relative; min-height: 200px;
+}
+
+/* Flash overlay that fires on pick */
+.flashOverlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 10;
+  border-radius: var(--r-lg);
+  animation: flashOut 0.4s ease forwards;
+}
+.flash-left  { background: radial-gradient(ellipse at left,  rgba(201,168,76,0.22) 0%, transparent 65%); }
+.flash-right { background: radial-gradient(ellipse at right, rgba(201,168,76,0.22) 0%, transparent 65%); }
+@keyframes flashOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Choice card ─────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px 18px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  /* Base state — use will-change for GPU compositing */
+  will-change: transform, opacity, box-shadow;
+  transform-origin: center center;
+  /* Default transition for idle↔hover */
+  transition:
+    transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+}
+
+/* Top shimmer line */
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.18), transparent);
+  transition: opacity 0.22s;
+}
+
+/* Glow layer — expands on hover/winner */
+.cardGlow {
+  position: absolute; inset: -20%; pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Ripple element (purely decorative ring on click) */
+.cardRipple {
+  position: absolute; inset: 0;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--gold);
+  opacity: 0;
+  transform: scale(1);
+  pointer-events: none;
+}
+
+.cardInner {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px; position: relative; z-index: 1;
+}
+.cardLabel {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); opacity: 0.6;
+}
+.cardText {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(15px, 3vw, 21px);
+  color: var(--cream); line-height: 1.25;
+}
+.cardCTA {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.08em; color: var(--gold);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+/* ── ANIMATION STATES ────────────────────────────────────── */
+
+/* 1. Idle — just sit there */
+.idle {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* 2. Hovered — grow toward the user */
+.hovered {
+  transform: scale(1.055) translateY(-6px);
+  border-color: rgba(201,168,76,0.5);
+  box-shadow:
+    0 20px 48px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(201,168,76,0.2),
+    0 0 32px rgba(201,168,76,0.08) inset;
+}
+.hovered .cardGlow    { opacity: 1; transform: scale(1); }
+.hovered .cardCTA     { opacity: 1; transform: translateY(0); }
+.hovered .cardLabel   { opacity: 1; }
+.hovered::before      { opacity: 1.5; }
+
+/* 3. Winner surge — slam forward with gold burst */
+.winner-surge {
+  animation: winnerSurge 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  border-color: var(--gold) !important;
+  box-shadow:
+    0 0 0 3px rgba(201,168,76,0.3),
+    0 24px 56px rgba(201,168,76,0.2),
+    0 0 40px rgba(201,168,76,0.12) inset !important;
+}
+.winner-surge .cardGlow { opacity: 1; transform: scale(1.4); }
+.winner-surge .cardRipple {
+  animation: ripplePulse 0.55s ease forwards;
+}
+@keyframes winnerSurge {
+  0%   { transform: scale(1)    translateY(0); }
+  30%  { transform: scale(1.08) translateY(-10px); }
+  55%  { transform: scale(1.04) translateY(-6px); }
+  100% { transform: scale(1.04) translateY(-6px); }
+}
+@keyframes ripplePulse {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.25); }
+}
+
+/* 4. Loser flies off RIGHT (left card loses, hit right) */
+.loser-flyRight {
+  animation: flyRight 0.52s cubic-bezier(0.55,0,1,0.45) forwards;
+  pointer-events: none;
+}
+@keyframes flyRight {
+  0%   { transform: scale(1)    translateX(0)    rotate(0deg);   opacity: 1; }
+  20%  { transform: scale(0.92) translateX(-12px) rotate(-2deg); opacity: 0.9; }
+  100% { transform: scale(0.78) translateX(130%) rotate(8deg);  opacity: 0; }
+}
+
+/* 5. Loser flies off LEFT (right card loses, hit left) */
+.loser-flyLeft {
+  animation: flyLeft 0.52s cubic-bezier(0.55,0,1,0.45) forwards;
+  pointer-events: none;
+}
+@keyframes flyLeft {
+  0%   { transform: scale(1)    translateX(0)    rotate(0deg);  opacity: 1; }
+  20%  { transform: scale(0.92) translateX(12px) rotate(2deg);  opacity: 0.9; }
+  100% { transform: scale(0.78) translateX(-130%) rotate(-8deg); opacity: 0; }
+}
+
+/* ── VS badge ────────────────────────────────────────────── */
+.vsBadge {
+  display: flex; align-items: center; justify-content: center;
+  width: 44px; flex-shrink: 0; z-index: 2; position: relative;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted);
+}
+.vsBadge::before, .vsBadge::after {
+  content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+  width: 1px; background: var(--border);
+}
+.vsBadge::before { top: 0; height: calc(50% - 14px); }
+.vsBadge::after  { bottom: 0; height: calc(50% - 14px); }
+
+.vsShake {
+  animation: vsShake 0.35s cubic-bezier(0.36,0.07,0.19,0.97) both;
+}
+@keyframes vsShake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-3px); }
+  40%, 60% { transform: translateX(3px); }
+}
+
+/* ── Eliminated label ────────────────────────────────────── */
+.eliminatedRow {
+  display: flex; justify-content: center;
+  animation: fadeInUp 0.3s ease both;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.eliminatedTag {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--red); opacity: 0.7;
+  padding: 3px 10px; border-radius: 20px;
+  border: 1px solid rgba(224,92,92,0.2);
+  background: rgba(224,92,92,0.06);
+}
+
+/* ── Champion banner ─────────────────────────────────────── */
+.championBanner {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid rgba(201,168,76,0.28);
+  border-radius: 28px; padding: 40px 28px 36px;
+  text-align: center; overflow: hidden;
+  animation: championReveal 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  /* Subtle dark floor so spotlights read better */
+  background: radial-gradient(ellipse at 50% 110%, rgba(201,168,76,0.04) 0%, var(--surface) 60%);
+}
+@keyframes championReveal {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Top gold + purple bar */
+.championBanner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--purple), var(--gold), transparent);
+  opacity: 0.7; z-index: 3;
+}
+
+/* ── SPOTLIGHT SYSTEM ─────────────────────────────────────
+   Three layers, all pseudo-elements + extra divs:
+   1. .spotlightCone   — main centre beam from top, sweeps slowly
+   2. .spotlightLeft   — left side beam converging inward
+   3. .spotlightRight  — right side beam converging inward
+   4. .spotlightHalo   — pulsing radial behind trophy
+   5. .spotlightFloor  — ellipse glow at banner bottom
+   ────────────────────────────────────────────────────────── */
+
+/* 1. Main cone — conic-gradient pointing down, sweeps left↔right */
+.spotlightCone {
+  position: absolute;
+  top: -10px; left: 50%; transform: translateX(-50%);
+  width: 160%; height: 100%;
+  background: conic-gradient(
+    from 180deg at 50% 0%,
+    transparent 70deg,
+    rgba(201,168,76,0.09) 84deg,
+    rgba(232,201,122,0.16) 90deg,
+    rgba(201,168,76,0.09) 96deg,
+    transparent 110deg
+  );
+  pointer-events: none; z-index: 0;
+  animation: coneSweep 4s ease-in-out infinite alternate;
+  transform-origin: 50% 0%;
+}
+@keyframes coneSweep {
+  0%   { transform: translateX(-50%) rotate(-10deg); opacity: 0.7; }
+  50%  { opacity: 1; }
+  100% { transform: translateX(-50%) rotate(10deg);  opacity: 0.7; }
+}
+
+/* 2 & 3. Side beams — narrow conic wedges from top corners */
+.spotlightLeft {
+  position: absolute; top: -4px; left: -8%;
+  width: 70%; height: 100%;
+  background: conic-gradient(
+    from 155deg at 0% 0%,
+    transparent 0deg,
+    rgba(139,109,209,0.06) 16deg,
+    rgba(139,109,209,0.11) 20deg,
+    rgba(139,109,209,0.06) 24deg,
+    transparent 40deg
+  );
+  pointer-events: none; z-index: 0;
+  animation: beamLeft 3.5s ease-in-out infinite alternate;
+  transform-origin: 0% 0%;
+}
+@keyframes beamLeft {
+  0%   { opacity: 0.5; transform: rotate(-6deg); }
+  100% { opacity: 1;   transform: rotate(6deg);  }
+}
+
+.spotlightRight {
+  position: absolute; top: -4px; right: -8%;
+  width: 70%; height: 100%;
+  background: conic-gradient(
+    from 201deg at 100% 0%,
+    transparent 0deg,
+    rgba(139,109,209,0.06) 16deg,
+    rgba(139,109,209,0.11) 20deg,
+    rgba(139,109,209,0.06) 24deg,
+    transparent 40deg
+  );
+  pointer-events: none; z-index: 0;
+  animation: beamRight 3.5s ease-in-out infinite alternate;
+  transform-origin: 100% 0%;
+}
+@keyframes beamRight {
+  0%   { opacity: 0.5; transform: rotate(6deg);  }
+  100% { opacity: 1;   transform: rotate(-6deg); }
+}
+
+/* 4. Halo — soft radial pulse behind trophy */
+.spotlightHalo {
+  position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+  width: 220px; height: 220px; border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(201,168,76,0.18) 0%,
+    rgba(201,168,76,0.06) 40%,
+    transparent 70%
+  );
+  pointer-events: none; z-index: 0;
+  animation: haloPulse 2.4s ease-in-out infinite;
+}
+@keyframes haloPulse {
+  0%,100% { transform: translateX(-50%) scale(0.88); opacity: 0.6; }
+  50%     { transform: translateX(-50%) scale(1.12); opacity: 1; }
+}
+
+/* 5. Floor reflection ellipse at banner bottom */
+.spotlightFloor {
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 48px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.14) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: floorPulse 2.4s ease-in-out infinite;
+}
+@keyframes floorPulse {
+  0%,100% { opacity: 0.5; transform: translateX(-50%) scaleX(0.85); }
+  50%     { opacity: 1;   transform: translateX(-50%) scaleX(1.1);  }
+}
+
+/* Confetti dots */
+.championConfetti {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1;
+}
+.confettiDot {
+  position: absolute;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold);
+  top: calc(var(--i) * 8.3%);
+  left: calc(10% + var(--i) * 7%);
+  animation: confettiFall 1.2s calc(var(--i) * 0.08s) ease both;
+  opacity: 0;
+}
+.confettiDot:nth-child(odd)  { background: var(--purple); border-radius: 2px; }
+.confettiDot:nth-child(3n)   { background: var(--green); }
+@keyframes confettiFall {
+  0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(140px) rotate(360deg) scale(0.5); }
+}
+
+/* All content sits above spotlight layers */
+.championTrophy {
+  font-size: 52px; display: block; margin-bottom: 12px;
+  position: relative; z-index: 2;
+  animation: trophyBounce 0.7s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+  filter: drop-shadow(0 0 18px rgba(201,168,76,0.5));
+}
+@keyframes trophyBounce {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg);  opacity: 1; }
+}
+.championEyebrow {
+  display: block; font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+  position: relative; z-index: 2;
+}
+.championTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 6vw, 44px);
+  color: #e8c97a; line-height: 1.15; margin: 0 0 8px;
+  position: relative; z-index: 2;
+  /* Text glow to sell the spotlight hitting it */
+  text-shadow:
+    0 0 40px rgba(201,168,76,0.35),
+    0 0 80px rgba(201,168,76,0.15);
+  animation: titleGlow 2.4s ease-in-out infinite;
+}
+@keyframes titleGlow {
+  0%,100% { text-shadow: 0 0 30px rgba(201,168,76,0.25), 0 0 60px rgba(201,168,76,0.10); }
+  50%     { text-shadow: 0 0 50px rgba(201,168,76,0.50), 0 0 90px rgba(201,168,76,0.22); }
+}
+.championSub {
+  font-size: 13px; color: var(--muted); margin: 0;
+  position: relative; z-index: 2;
+}
+
+/* ── Winner actions ──────────────────────────────────────── */
+.winActions { display: flex; gap: 10px; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .arena { grid-template-columns: 1fr; grid-template-rows: auto auto auto; gap: 0; }
+  .vsBadge { width: auto; height: 36px; flex-direction: row; }
+  .vsBadge::before { width: calc(50% - 14px); height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+  .vsBadge::after  { width: calc(50% - 14px); height: 1px; top: 50%; right: 0; left: auto; transform: translateY(-50%); }
+  .loser-flyRight { animation: flyDown  0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  .loser-flyLeft  { animation: flyUp    0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  @keyframes flyDown {
+    0%   { transform: scale(1)    translateY(0);    opacity: 1; }
+    100% { transform: scale(0.78) translateY(120%) rotate(4deg); opacity: 0; }
+  }
+  @keyframes flyUp {
+    0%   { transform: scale(1)    translateY(0);     opacity: 1; }
+    100% { transform: scale(0.78) translateY(-120%) rotate(-4deg); opacity: 0; }
+  }
+  .winActions { flex-direction: column; }
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .card, .vsBadge, .championTrophy, .confettiDot,
+  .arenaWrap, .championBanner, .flashOverlay,
+  .eliminatedRow, .cardGlow, .cardRipple, .cardCTA,
+  .spotlightCone, .spotlightLeft, .spotlightRight,
+  .spotlightHalo, .spotlightFloor, .championTitle {
+    animation: none !important; transition: none !important;
+  }
+  .winner-surge { transform: scale(1.04); opacity: 1; border-color: var(--gold) !important; }
+  .loser-flyRight, .loser-flyLeft { opacity: 0.2; transform: scale(0.9); }
+  .championTitle { text-shadow: none; }
+}

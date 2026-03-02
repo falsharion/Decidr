@@ -5,7 +5,7 @@ import Toast from '../components/ui/Toast'
 import { useHistory } from '../hooks/useHistory'
 import { useToast } from '../hooks/useToast'
 import { timeAgo, buildShareUrl, copyText } from '../lib/utils'
-import styles from './HistoryPage.module.css'
+import styles from './Historypage.module.css'
 
 const TOOL_ICONS = { Coin: '✦', 'pros-cons': '⚖', bracket: '🥊', planner: '📅' }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import PageHeader from '../components/ui/PageHeader'
-import styles from './ClarityEnginePage.module.css'
+import styles from './Clarityenginepage.module.css'
 
 // ── Scoring ──────────────────────────────────────────────────
 function computeScore({ stakes, reversibility, regret, instinct, timeframe }) {

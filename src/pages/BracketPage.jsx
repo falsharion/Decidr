@@ -7,7 +7,7 @@ import { useHistory } from '../hooks/useHistory'
 import { useToast } from '../hooks/useToast'
 import { bracketPrompt } from '../lib/prompts'
 import { uid, buildShareUrl, copyText } from '../lib/utils'
-import styles from './BracketPage.module.css'
+import styles from './Bracketpage.module.css'
 
 // Animation states for each card slot
 // idle | hovered | winner-surge | loser-flyLeft | loser-flyRight | entering-left | entering-right

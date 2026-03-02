@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { lsGet, WEEK_DAYS, currentWeekStart, todayWeekDay } from '../lib/utils'
-import styles from './DashboardPage.module.css'
+import styles from './Dashboardpage.module.css'
 
 // ── Data readers ─────────────────────────────────────────────
 function readWeekPlan() {

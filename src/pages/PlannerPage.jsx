@@ -6,7 +6,7 @@ import { useAI } from '../hooks/useAI'
 import { useToast } from '../hooks/useToast'
 import { weeklyReviewPrompt } from '../lib/prompts'
 import { WEEK_DAYS, DAY_LABELS, todayWeekDay, formatWeekRange, uid } from '../lib/utils'
-import styles from './PlannerPage.module.css'
+import styles from './Plannerpage.module.css'
 
 const PRI_BADGE = { high: 'badge-red', medium: 'badge-amber', low: 'badge-green' }
 const PRI_EMOJI = { high: '🔴', medium: '🟡', low: '🟢' }

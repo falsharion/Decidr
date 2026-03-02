@@ -7,7 +7,7 @@ import { useHistory } from '../hooks/useHistory'
 import { useToast } from '../hooks/useToast'
 import { prosConsPrompt } from '../lib/prompts'
 import { uid, buildShareUrl, copyText } from '../lib/utils'
-import styles from './ProsConsPage.module.css'
+import styles from './Prosconspage.module.css'
 
 function makeOption(label = '') {
   return { id: uid(), label, pros: [''], cons: [''] }

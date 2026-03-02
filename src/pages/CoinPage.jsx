@@ -6,7 +6,7 @@ import { useHistory } from '../hooks/useHistory'
 import { useToast } from '../hooks/useToast'
 import { coinAIPickPrompt } from '../lib/prompts'
 import { buildShareUrl, copyText, uid } from '../lib/utils'
-import styles from './CoinPage.module.css'
+import styles from './Coinpage.module.css'
 
 function parseAIResponse(raw) {
   if (!raw) return { choice: null, reason: null }

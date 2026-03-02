@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { decodeSharePayload } from '../lib/utils'
-import styles from './SharePage.module.css'
+import styles from './Sharepage.module.css'
 
 export default function SharePage() {
   const [params]              = useSearchParams()

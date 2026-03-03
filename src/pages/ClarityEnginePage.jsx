@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import PageHeader from '../components/ui/PageHeader'
 import styles from './Clarityenginepage.module.css'
+import { Link } from 'react-router-dom'
 
 // ── Scoring ──────────────────────────────────────────────────
 function computeScore({ stakes, reversibility, regret, instinct, timeframe }) {
@@ -377,7 +378,7 @@ export default function ClarityEnginePage() {
               </div>
               <div className={styles.resultActions}>
                 <button className="btn-outline" onClick={reset}>↺ New Decision</button>
-                <a href="/pros-cons" className="btn-outline" style={{ textAlign:'center', flex:1 }}>⚖ Deep dive →</a>
+         <Link to="/pros-cons" className="btn-outline" style={{ textAlign:'center', flex:1 }}>⚖ Deep dive →</Link>
               </div>
             </div>
           )}

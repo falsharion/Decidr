@@ -249,12 +249,12 @@ export default function PlannerPage() {
         </div>
 
         {/* ── Persistence notice (only shown once, then dismissed) */}
-        {plan.tasks.length === 0 && plan.goals.length === 0 && (
+        {/* {plan.tasks.length === 0 && plan.goals.length === 0 && (
           <div className={styles.persistNotice}>
             <span aria-hidden="true">💾</span>
             <span>Everything you add is auto-saved — it'll still be here when you come back.</span>
           </div>
-        )}
+        )} */}
 
         {/* ── Goals ──────────────────────────────────────────── */}
         <div className={`card card-body ${styles.goalsCard} anim-up`}>

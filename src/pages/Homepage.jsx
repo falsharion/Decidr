@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import styles from './Homepage.module.css'
+import styles from './HomePage.module.css'
 
 const TOOLS = [
   { to: '/coin',      icon: '🪙', name: 'The Coin',       tag: 'Quick pick',  desc: 'Flip across your options with AI wisdom on why it might be the right call.' },
